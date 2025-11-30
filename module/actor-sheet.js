@@ -48,7 +48,7 @@ export class SimpleActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   };
 
   /** Track active tab */
-  _activeTab = "description";
+  _activeTab = "specialmoves";
 
   /** Track which description field is being edited */
   _editingDescriptionTarget = null;

@@ -41,38 +41,12 @@
 
 {{!-- Sheet Tab Navigation --}}
 <nav class="sheet-tabs tabs">
-    <a class="item {{#if (eq activeTab 'description')}}active{{/if}}" data-tab="description" data-action="switchTab">{{localize "SIMPLE.TabDescription"}}</a>
     <a class="item {{#if (eq activeTab 'specialmoves')}}active{{/if}}" data-tab="specialmoves" data-action="switchTab">{{localize "SIMPLE.SpecialMoves"}}</a>
-    <a class="item {{#if (eq activeTab 'attributes')}}active{{/if}}" data-tab="attributes" data-action="switchTab">{{localize "SIMPLE.TabAttributes"}}</a>
+    <a class="item {{#if (eq activeTab 'description')}}active{{/if}}" data-tab="description" data-action="switchTab">{{localize "SIMPLE.TabDescription"}}</a>
 </nav>
 
 {{!-- Sheet Body --}}
 <section class="sheet-body">
-
-    {{!-- Biography Tab --}}
-    <div class="tab description {{#if (eq activeTab 'description')}}active{{/if}}" data-tab="description">
-        {{#if (eq editingDescriptionTarget "system.biography")}}
-        <div class="editor-wrapper editing">
-            <div class="editor-header">
-                <button type="button" class="editor-control editor-edit" data-target="system.biography" title="{{localize 'SIMPLE.FinishEditing'}}">
-                    <i class="fas fa-check"></i> {{localize "SIMPLE.Done"}}
-                </button>
-            </div>
-            <prose-mirror name="system.biography" value="{{biographyValue}}" document-uuid="{{actor.uuid}}" compact>{{{biographyHTML}}}</prose-mirror>
-        </div>
-        {{else}}
-        <div class="editor-wrapper">
-            {{#if editable}}
-            <div class="editor-header">
-                <button type="button" class="editor-control editor-edit" data-target="system.biography" title="{{localize 'SIMPLE.EditDescription'}}">
-                    <i class="fas fa-edit"></i> {{localize "SIMPLE.Edit"}}
-                </button>
-            </div>
-            {{/if}}
-            <div class="editor editor-content">{{{biographyHTML}}}</div>
-        </div>
-        {{/if}}
-    </div>
 
     {{!-- Special Moves Tab --}}
     <div class="tab specialmoves {{#if (eq activeTab 'specialmoves')}}active{{/if}}" data-tab="specialmoves">
@@ -109,28 +83,30 @@
         </div>
     </div>
 
-    {{!-- Attributes Tab --}}
-    <div class="tab attributes {{#if (eq activeTab 'attributes')}}active{{/if}}" data-tab="attributes">
-        <header class="attributes-header flexrow">
-            <span class="attribute-key">{{localize "SIMPLE.AttributeKey"}}</span>
-            <span class="attribute-value">{{localize "SIMPLE.AttributeValue"}}</span>
-            <span class="attribute-label">{{localize "SIMPLE.AttributeLabel"}}</span>
-            <span class="attribute-dtype">{{localize "SIMPLE.AttributeDtype"}}</span>
-            <a class="attribute-control" data-action="createAttribute"><i class="fas fa-plus"></i></a>
-        </header>
-
-        {{!-- Render the attribute list partial. --}}
-        {{> "systems/worldbuilding/templates/parts/sheet-attributes.html" attributes=systemData.ungroupedAttributes dtypes=dtypes}}
-
-        {{!-- Render the grouped attributes partial and control. --}}
-        <div class="groups">
-            {{> "systems/worldbuilding/templates/parts/sheet-groups.html" attributes=systemData.groupedAttributes groups=systemData.groups dtypes=dtypes}}
-
-            <div class="group-controls flexrow">
-                <input class="group-prefix" type="text" value=""/>
-                <a class="button group-control" data-action="createGroup"><i class="fas fa-plus"></i>Add Attribute Group</a>
+    {{!-- Biography Tab --}}
+    <div class="tab description {{#if (eq activeTab 'description')}}active{{/if}}" data-tab="description">
+        {{#if (eq editingDescriptionTarget "system.biography")}}
+        <div class="editor-wrapper editing">
+            <div class="editor-header">
+                <button type="button" class="editor-control editor-edit" data-target="system.biography" title="{{localize 'SIMPLE.FinishEditing'}}">
+                    <i class="fas fa-check"></i> {{localize "SIMPLE.Done"}}
+                </button>
             </div>
+            <prose-mirror name="system.biography" value="{{biographyValue}}" document-uuid="{{actor.uuid}}" compact>{{{biographyHTML}}}</prose-mirror>
         </div>
+        {{else}}
+        <div class="editor-wrapper">
+            {{#if editable}}
+            <div class="editor-header">
+                <button type="button" class="editor-control editor-edit" data-target="system.biography" title="{{localize 'SIMPLE.EditDescription'}}">
+                    <i class="fas fa-edit"></i> {{localize "SIMPLE.Edit"}}
+                </button>
+            </div>
+            {{/if}}
+            <div class="editor editor-content">{{{biographyHTML}}}</div>
+        </div>
+        {{/if}}
     </div>
+
 </section>
 </div>
