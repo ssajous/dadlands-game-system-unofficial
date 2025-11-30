@@ -43,10 +43,16 @@ Hooks.once("init", async function() {
   CONFIG.Token.objectClass = SimpleToken;
 
   // Register sheet application classes
-  Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("worldbuilding", SimpleActorSheet, { makeDefault: true });
-  Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("worldbuilding", SimpleItemSheet, { makeDefault: true });
+  DocumentSheetConfig.unregisterSheet(Actor, "core", foundry.applications.sheets.ActorSheetV2);
+  DocumentSheetConfig.registerSheet(Actor, "worldbuilding", SimpleActorSheet, {
+    makeDefault: true,
+    label: "SIMPLE.SheetClassActor"
+  });
+  DocumentSheetConfig.unregisterSheet(Item, "core", foundry.applications.sheets.ItemSheetV2);
+  DocumentSheetConfig.registerSheet(Item, "worldbuilding", SimpleItemSheet, {
+    makeDefault: true,
+    label: "SIMPLE.SheetClassItem"
+  });
 
   // Register system settings
   game.settings.register("worldbuilding", "macroShorthand", {
@@ -113,11 +119,11 @@ Hooks.on("getActorDirectoryEntryContext", (html, options) => {
     name: game.i18n.localize("SIMPLE.DefineTemplate"),
     icon: '<i class="fas fa-stamp"></i>',
     condition: li => {
-      const actor = game.actors.get(li.data("documentId"));
+      const actor = game.actors.get(li.dataset.documentId);
       return !actor.isTemplate;
     },
     callback: li => {
-      const actor = game.actors.get(li.data("documentId"));
+      const actor = game.actors.get(li.dataset.documentId);
       actor.setFlag("worldbuilding", "isTemplate", true);
     }
   });
@@ -127,11 +133,11 @@ Hooks.on("getActorDirectoryEntryContext", (html, options) => {
     name: game.i18n.localize("SIMPLE.UnsetTemplate"),
     icon: '<i class="fas fa-times"></i>',
     condition: li => {
-      const actor = game.actors.get(li.data("documentId"));
+      const actor = game.actors.get(li.dataset.documentId);
       return actor.isTemplate;
     },
     callback: li => {
-      const actor = game.actors.get(li.data("documentId"));
+      const actor = game.actors.get(li.dataset.documentId);
       actor.setFlag("worldbuilding", "isTemplate", false);
     }
   });
@@ -147,11 +153,11 @@ Hooks.on("getItemDirectoryEntryContext", (html, options) => {
     name: game.i18n.localize("SIMPLE.DefineTemplate"),
     icon: '<i class="fas fa-stamp"></i>',
     condition: li => {
-      const item = game.items.get(li.data("documentId"));
+      const item = game.items.get(li.dataset.documentId);
       return !item.isTemplate;
     },
     callback: li => {
-      const item = game.items.get(li.data("documentId"));
+      const item = game.items.get(li.dataset.documentId);
       item.setFlag("worldbuilding", "isTemplate", true);
     }
   });
@@ -161,11 +167,11 @@ Hooks.on("getItemDirectoryEntryContext", (html, options) => {
     name: game.i18n.localize("SIMPLE.UnsetTemplate"),
     icon: '<i class="fas fa-times"></i>',
     condition: li => {
-      const item = game.items.get(li.data("documentId"));
+      const item = game.items.get(li.dataset.documentId);
       return item.isTemplate;
     },
     callback: li => {
-      const item = game.items.get(li.data("documentId"));
+      const item = game.items.get(li.dataset.documentId);
       item.setFlag("worldbuilding", "isTemplate", false);
     }
   });

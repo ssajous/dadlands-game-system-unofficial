@@ -4,7 +4,7 @@
         <li class="attribute flexrow" data-attribute="{{#if attr.group}}{{attr.group}}.{{/if}}{{key}}">
             <div class="attribute-key-wrapper flexrow">
                 {{#if attr.isFormula}}
-                    <a class="attribute-roll" data-label="{{attr.label}}" data-roll="{{attr.value}}"><i class="fas fa-dice-d20"></i></a>
+                    <a class="attribute-roll" data-action="rollAttribute" data-label="{{attr.label}}" data-roll="{{attr.value}}"><i class="fas fa-dice-d20"></i></a>
                 {{/if}}
                 <input class="attribute-key" type="text" name="system.attributes.{{#if attr.group}}{{attr.group}}.{{/if}}{{key}}.key" value="{{key}}" placeholder="{{localize "SIMPLE.AttributeKey"}}"/>
             </div>
@@ -44,7 +44,7 @@
 	        {{selectOptions ../dtypes selected=attr.dtype valueAttr="label" labelAttr="label"}}
             </select>
             <input type="hidden" name="system.attributes.{{#if attr.group}}{{attr.group}}.{{/if}}{{key}}.group" value="{{attr.group}}" />
-            <a class="attribute-control" data-action="delete"><i class="fas fa-trash"></i></a>
+            <a class="attribute-control" data-action="deleteAttribute"><i class="fas fa-trash"></i></a>
         </li>
         {{/each}}
     </ol>

@@ -1,6 +1,6 @@
 {
   "id": "worldbuilding",
-  "version": "0.8.2",
+  "version": "0.9.0",
   "title": "Simple World-Building",
   "url": "https://github.com/foundryvtt/worldbuilding/",
   "description": "A minimalist game system which provides configurable Actor and Item templates to support free-form system agnostic game-play.",
@@ -27,8 +27,8 @@
     }
   ],
   "compatibility": {
-    "minimum": "10",
-    "verified": "11"
+    "minimum": "13",
+    "verified": "13"
   },
   "grid": {
     "distance": 5,

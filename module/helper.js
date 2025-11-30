@@ -116,7 +116,7 @@ export class EntitySheetHelper {
         // Handle value and name replacement otherwise.
         if ( !attrError ) {
           oldVal = oldVal.includes('.') ? oldVal.split('.')[1] : oldVal;
-          attr = $(el).attr('name').replace(oldVal, val);
+          attr = el.getAttribute('name').replace(oldVal, val);
         }
       }
 
@@ -266,30 +266,23 @@ export class EntitySheetHelper {
    * @private
    */
   static async createAttribute(event, app) {
-    const a = event.currentTarget;
+    const a = event.currentTarget ?? event.target;
     const group = a.dataset.group;
     let dtype = a.dataset.dtype;
-    const attrs = app.object.system.attributes;
-    const groups = app.object.system.groups;
-    const form = app.form;
+    const attrs = app.document.system.attributes;
+    const groups = app.document.system.groups;
 
     // Determine the new attribute key for ungrouped attributes.
     let objKeys = Object.keys(attrs).filter(k => !Object.keys(groups).includes(k));
     let nk = Object.keys(attrs).length + 1;
     let newValue = `attr${nk}`;
-    let newKey = document.createElement("div");
     while ( objKeys.includes(newValue) ) {
       ++nk;
       newValue = `attr${nk}`;
     }
 
-    // Build options for construction HTML inputs.
-    let htmlItems = {
-      key: {
-        type: "text",
-        value: newValue
-      }
-    };
+    // Build the update data
+    const updateData = {};
 
     // Grouped attributes.
     if ( group ) {
@@ -298,40 +291,29 @@ export class EntitySheetHelper {
       newValue = `attr${nk}`;
       while ( objKeys.includes(newValue) ) {
         ++nk;
-        newValue =  `attr${nk}`;
+        newValue = `attr${nk}`;
       }
-
-      // Update the HTML options used to build the new input.
-      htmlItems.key.value = newValue;
-      htmlItems.group = {
-        type: "hidden",
-        value: group
-      };
-      htmlItems.dtype = {
-        type: "hidden",
-        value: dtype
+      updateData[`system.attributes.${group}.${newValue}`] = {
+        key: newValue,
+        group: group,
+        dtype: dtype || groups[group]?.dtype || "String"
       };
     }
     // Ungrouped attributes.
     else {
       // Choose a default dtype based on the last attribute, fall back to "String".
       if (!dtype) {
-        let lastAttr = document.querySelector('.attributes > .attributes-group .attribute:last-child .attribute-dtype')?.value;
-        dtype = lastAttr ? lastAttr : "String";
-        htmlItems.dtype = {
-          type: "hidden",
-          value: dtype
-        };
+        const attrList = Object.values(attrs).filter(a => a.dtype);
+        dtype = attrList.length > 0 ? attrList[attrList.length - 1].dtype : "String";
       }
+      updateData[`system.attributes.${newValue}`] = {
+        key: newValue,
+        dtype: dtype
+      };
     }
 
-    // Build the form elements used to create the new grouped attribute.
-    newKey.innerHTML = EntitySheetHelper.getAttributeHtml(htmlItems, nk, group);
-
-    // Append the form element and submit the form.
-    newKey = newKey.children[0];
-    form.appendChild(newKey);
-    await app._onSubmit(event);
+    // Update the document
+    return app.document.update(updateData);
   }
 
   /**
@@ -341,11 +323,13 @@ export class EntitySheetHelper {
    * @private
    */
   static async deleteAttribute(event, app) {
-    const a = event.currentTarget;
+    const a = event.currentTarget ?? event.target;
     const li = a.closest(".attribute");
     if ( li ) {
-      li.parentElement.removeChild(li);
-      await app._onSubmit(event);
+      const attrKey = li.dataset.attribute;
+      const updateData = {};
+      updateData[`system.attributes.-=${attrKey}`] = null;
+      return app.document.update(updateData);
     }
   }
 
@@ -358,17 +342,19 @@ export class EntitySheetHelper {
    * @private
    */
   static async createAttributeGroup(event, app) {
-    const a = event.currentTarget;
-    const form = app.form;
-    let newValue = $(a).siblings('.group-prefix').val();
+    const a = event.currentTarget ?? event.target;
+    const groupInput = app.element.querySelector('.group-prefix');
+    const newValue = groupInput?.value?.trim();
+
     // Verify the new group key is valid, and use it to create the group.
-    if ( newValue.length > 0 && EntitySheetHelper.validateGroup(newValue, app.object) ) {
-      let newKey = document.createElement("div");
-      newKey.innerHTML = `<input type="text" name="system.groups.${newValue}.key" value="${newValue}"/>`;
-      // Append the form element and submit the form.
-      newKey = newKey.children[0];
-      form.appendChild(newKey);
-      await app._onSubmit(event);
+    if ( newValue && newValue.length > 0 && EntitySheetHelper.validateGroup(newValue, app.document) ) {
+      const updateData = {};
+      updateData[`system.groups.${newValue}`] = {
+        key: newValue,
+        label: "",
+        dtype: "String"
+      };
+      return app.document.update(updateData);
     }
   }
 
@@ -381,44 +367,47 @@ export class EntitySheetHelper {
    * @private
    */
   static async deleteAttributeGroup(event, app) {
-    const a = event.currentTarget;
-    let groupHeader = a.closest(".group-header");
-    let groupContainer = groupHeader.closest(".group");
-    let group = $(groupHeader).find('.group-key');
+    const a = event.currentTarget ?? event.target;
+    const groupContainer = a.closest(".group");
+    const groupKey = groupContainer?.dataset.group;
+
+    if ( !groupKey ) return;
+
     // Create a dialog to confirm group deletion.
-    new Dialog({
-      title: game.i18n.localize("SIMPLE.DeleteGroup"),
-      content: `${game.i18n.localize("SIMPLE.DeleteGroupContent")} <strong>${group.val()}</strong>`,
-      buttons: {
-        confirm: {
-          icon: '<i class="fas fa-trash"></i>',
-          label: game.i18n.localize("Yes"),
-          callback: async () => {
-            groupContainer.parentElement.removeChild(groupContainer);
-            await app._onSubmit(event);
-          }
-        },
-        cancel: {
-          icon: '<i class="fas fa-times"></i>',
-          label: game.i18n.localize("No"),
-        }
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize("SIMPLE.DeleteGroup") },
+      content: `${game.i18n.localize("SIMPLE.DeleteGroupContent")} <strong>${groupKey}</strong>`,
+      yes: {
+        label: game.i18n.localize("Yes"),
+        icon: "fas fa-trash"
+      },
+      no: {
+        label: game.i18n.localize("No"),
+        icon: "fas fa-times"
       }
-    }).render(true);
+    });
+
+    if ( confirmed ) {
+      const updateData = {};
+      updateData[`system.groups.-=${groupKey}`] = null;
+      updateData[`system.attributes.-=${groupKey}`] = null;
+      return app.document.update(updateData);
+    }
   }
 
   /* -------------------------------------------- */
 
   /**
    * Update attributes when updating an actor object.
-   * @param {object} formData       The form data object to modify keys and values for.
+   * @param {object} formData       The expanded form data object to modify.
    * @param {Document} document     The Actor or Item document within which attributes are being updated
    * @returns {object}              The updated formData object.
    */
   static updateAttributes(formData, document) {
     let groupKeys = [];
 
-    // Handle the free-form attributes list
-    const formAttrs = foundry.utils.expandObject(formData)?.system?.attributes || {};
+    // Handle the free-form attributes list (formData is already expanded)
+    const formAttrs = formData?.system?.attributes || {};
     const attributes = Object.values(formAttrs).reduce((obj, v) => {
       let attrs = [];
       let group = null;
@@ -464,11 +453,9 @@ export class EntitySheetHelper {
       }
     }
 
-    // Re-combine formData
-    formData = Object.entries(formData).filter(e => !e[0].startsWith("system.attributes")).reduce((obj, e) => {
-      obj[e[0]] = e[1];
-      return obj;
-    }, {_id: document.id, "system.attributes": attributes});
+    // Update formData with processed attributes
+    formData.system = formData.system || {};
+    formData.system.attributes = attributes;
 
     return formData;
   }
@@ -477,12 +464,12 @@ export class EntitySheetHelper {
 
   /**
    * Update attribute groups when updating an actor object.
-   * @param {object} formData       The form data object to modify keys and values for.
+   * @param {object} formData       The expanded form data object to modify.
    * @param {Document} document     The Actor or Item document within which attributes are being updated
    * @returns {object}              The updated formData object.
    */
   static updateGroups(formData, document) {
-    const formGroups = foundry.utils.expandObject(formData).system.groups || {};
+    const formGroups = formData?.system?.groups || {};
     const documentGroups = Object.keys(document.system.groups || {});
 
     // Identify valid groups submitted on the form
@@ -497,11 +484,10 @@ export class EntitySheetHelper {
       if ( !groups.hasOwnProperty(k) ) groups[`-=${k}`] = null;
     }
 
-    // Re-combine formData
-    formData = Object.entries(formData).filter(e => !e[0].startsWith("system.groups")).reduce((obj, e) => {
-      obj[e[0]] = e[1];
-      return obj;
-    }, {_id: document.id, "system.groups": groups});
+    // Update formData with processed groups
+    formData.system = formData.system || {};
+    formData.system.groups = groups;
+
     return formData;
   }
 
@@ -531,7 +517,7 @@ export class EntitySheetHelper {
 
     // Render the document creation form
     const template = "templates/sidebar/document-create.html";
-    const html = await renderTemplate(template, {
+    const html = await foundry.applications.handlebars.renderTemplate(template, {
       name: data.name || game.i18n.format("DOCUMENT.New", {type: label}),
       folder: data.folder,
       folders: folders,
@@ -542,31 +528,31 @@ export class EntitySheetHelper {
     });
 
     // Render the confirmation dialog window
-    return Dialog.prompt({
-      title: title,
+    return foundry.applications.api.DialogV2.prompt({
+      window: { title: title },
       content: html,
-      label: title,
-      callback: html => {
+      ok: {
+        label: title,
+        callback: (event, button) => {
+          // Get the form data
+          const form = button.form;
+          const fd = new foundry.applications.ux.FormDataExtended(form);
+          let createData = fd.object;
 
-        // Get the form data
-        const form = html[0].querySelector("form");
-        const fd = new FormDataExtended(form);
-        let createData = fd.object;
+          // Merge with template data
+          const templateDoc = collection.get(form.elements.type?.value);
+          if ( templateDoc ) {
+            createData = foundry.utils.mergeObject(templateDoc.toObject(), createData);
+            createData.type = templateDoc.type;
+            delete createData.flags.worldbuilding.isTemplate;
+          }
 
-        // Merge with template data
-        const template = collection.get(form.type.value);
-        if ( template ) {
-          createData = foundry.utils.mergeObject(template.toObject(), createData);
-          createData.type = template.type;
-          delete createData.flags.worldbuilding.isTemplate;
+          // Merge provided override data
+          createData = foundry.utils.mergeObject(createData, data, { inplace: false });
+          return this.create(createData, {renderSheet: true});
         }
-
-        // Merge provided override data
-        createData = foundry.utils.mergeObject(createData, data, { inplace: false });
-        return this.create(createData, {renderSheet: true});
       },
-      rejectClose: false,
-      options: options
+      rejectClose: false
     });
   }
 

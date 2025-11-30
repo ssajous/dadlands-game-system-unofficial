@@ -1,4 +1,7 @@
 {
+  "TYPES.Actor.character": "Postać",
+  "TYPES.Item.item": "Przedmiot",
+
   "SETTINGS.SimpleMacroShorthandN": "Skrócona Składnia Makr",
   "SETTINGS.SimpleMacroShorthandL": "Włącz skróconą składnię makr, która umożliwia bezpośrednie odwoływanie się do atrybutów, na przykład @str zamiast @attributes.str.label. Wyłącz te ustawienie, jeśli potrzebujesz możliwości odwoływania się do pełnego modelu atrybutów, na przykład @attributes.str.label.",
   "SETTINGS.SimpleInitFormulaN": "Wzór Inicjatywy",
@@ -35,5 +38,8 @@
   "SIMPLE.DeleteGroupContent": "Czy chcesz usunąć tę grupę? Spowoduje to usunięcie następującej grupy i wszystkich powiązanych z nią atrybutów: ",
 
   "SIMPLE.Create": "Stwórz",
-  "SIMPLE.New": "Nowy"
+  "SIMPLE.New": "Nowy",
+
+  "SIMPLE.SheetClassActor": "Prosty Arkusz Aktora",
+  "SIMPLE.SheetClassItem": "Prosty Arkusz Przedmiotu"
 }

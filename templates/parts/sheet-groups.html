@@ -7,8 +7,8 @@
             <select class="group-dtype" name="system.groups.{{groupKey}}.dtype">
 	        {{selectOptions ../dtypes selected=group.dtype valueAttr="label" labelAttr="label"}}
             </select>
-            <a class="attribute-control" data-action="create" data-group="{{groupKey}}" data-dtype="{{group.dtype}}"><i class="fas fa-plus"></i></a>
-            <a class="group-control" data-action="delete-group"><i class="fas fa-trash"></i></a>
+            <a class="attribute-control" data-action="createAttribute" data-group="{{groupKey}}" data-dtype="{{group.dtype}}"><i class="fas fa-plus"></i></a>
+            <a class="group-control" data-action="deleteGroup"><i class="fas fa-trash"></i></a>
         </div>
 
         {{> "systems/worldbuilding/templates/parts/sheet-attributes.html" attributes=group.attributes group=groupKey dtypes=../dtypes}}

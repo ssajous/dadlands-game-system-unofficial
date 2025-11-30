@@ -19,13 +19,25 @@ export class SimpleTokenDocument extends TokenDocument {
 
   static getTrackedAttributes(data, _path=[]) {
     if ( data || _path.length ) return super.getTrackedAttributes(data, _path);
+
+    // Build tracked attributes from system template and template actors
     data = {};
-    for ( const model of Object.values(game.system.model.Actor) ) {
-      foundry.utils.mergeObject(data, model);
+
+    // Get attributes from the system template
+    const template = game.system.template?.Actor;
+    if ( template ) {
+      for ( const type of Object.keys(template) ) {
+        if ( type === "templates" ) continue;
+        const typeTemplate = template[type];
+        if ( typeTemplate ) foundry.utils.mergeObject(data, typeTemplate);
+      }
     }
+
+    // Include attributes from template actors
     for ( const actor of game.actors ) {
       if ( actor.isTemplate ) foundry.utils.mergeObject(data, actor.toObject());
     }
+
     return super.getTrackedAttributes(data);
   }
 }
