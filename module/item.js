@@ -9,9 +9,12 @@ export class SimpleItem extends Item {
   /** @inheritdoc */
   prepareDerivedData() {
     super.prepareDerivedData();
-    this.system.groups = this.system.groups || {};
-    this.system.attributes = this.system.attributes || {};
-    EntitySheetHelper.clampResourceValues(this.system.attributes);
+    // Only process groups/attributes for item type (not specialmove)
+    if (this.type === "item") {
+      this.system.groups = this.system.groups || {};
+      this.system.attributes = this.system.attributes || {};
+      EntitySheetHelper.clampResourceValues(this.system.attributes);
+    }
   }
 
   /* -------------------------------------------- */

@@ -14,12 +14,15 @@
       "min": 0,
       "max": 5
     },
+    "law": 4,
+    "chaos": 3,
+    "clan": "",
     "attributes": {},
     "groups": {}
   }
 },
 "Item": {
-  "types": ["item"],
+  "types": ["item", "specialmove"],
   "htmlFields": ["description"],
   "item": {
     "description": "",
@@ -27,6 +30,10 @@
     "weight": 0,
     "attributes": {},
     "groups": {}
+  },
+  "specialmove": {
+    "description": "",
+    "approach": "law"
   }
 }
 }

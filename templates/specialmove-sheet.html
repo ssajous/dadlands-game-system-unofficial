@@ -1,0 +1,50 @@
+<div class="flexcol">
+    <header class="sheet-header specialmove-header">
+    <img class="profile-img" src="{{item.img}}" data-action="editImage" data-edit="img" title="{{item.name}}" />
+    <div class="header-fields">
+        <h1 class="charname">
+            <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'SIMPLE.SpecialMoveName'}}" />
+        </h1>
+        <div class="approach-field">
+            <label>{{localize "SIMPLE.Approach"}}</label>
+            <div class="approach-select">
+                <label class="approach-option">
+                    <input type="radio" name="system.approach" value="law" {{#if (eq systemData.approach "law")}}checked{{/if}} />
+                    <span class="approach-label law">{{localize "SIMPLE.Law"}}</span>
+                </label>
+                <label class="approach-option">
+                    <input type="radio" name="system.approach" value="chaos" {{#if (eq systemData.approach "chaos")}}checked{{/if}} />
+                    <span class="approach-label chaos">{{localize "SIMPLE.Chaos"}}</span>
+                </label>
+            </div>
+        </div>
+    </div>
+</header>
+
+{{!-- Sheet Body --}}
+<section class="sheet-body">
+    <div class="tab description active" data-group="primary" data-tab="description">
+        {{#if (eq editingDescriptionTarget "system.description")}}
+        <div class="editor-wrapper editing">
+            <div class="editor-header">
+                <button type="button" class="editor-control editor-edit" data-target="system.description" title="{{localize 'SIMPLE.FinishEditing'}}">
+                    <i class="fas fa-check"></i> {{localize "SIMPLE.Done"}}
+                </button>
+            </div>
+            <prose-mirror name="system.description" value="{{descriptionValue}}" document-uuid="{{item.uuid}}" compact>{{{descriptionHTML}}}</prose-mirror>
+        </div>
+        {{else}}
+        <div class="editor-wrapper">
+            {{#if editable}}
+            <div class="editor-header">
+                <button type="button" class="editor-control editor-edit" data-target="system.description" title="{{localize 'SIMPLE.EditDescription'}}">
+                    <i class="fas fa-edit"></i> {{localize "SIMPLE.Edit"}}
+                </button>
+            </div>
+            {{/if}}
+            <div class="editor editor-content">{{{descriptionHTML}}}</div>
+        </div>
+        {{/if}}
+    </div>
+</section>
+</div>

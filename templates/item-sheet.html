@@ -27,7 +27,27 @@
 
     {{!-- Description Tab --}}
     <div class="tab" data-group="primary" data-tab="description">
-        {{editor descriptionHTML target="system.description" button=true editable=editable engine="prosemirror"}}
+        {{#if (eq editingDescriptionTarget "system.description")}}
+        <div class="editor-wrapper editing">
+            <div class="editor-header">
+                <button type="button" class="editor-control editor-edit" data-target="system.description" title="{{localize 'SIMPLE.FinishEditing'}}">
+                    <i class="fas fa-check"></i> {{localize "SIMPLE.Done"}}
+                </button>
+            </div>
+            <prose-mirror name="system.description" value="{{descriptionValue}}" document-uuid="{{item.uuid}}" compact>{{{descriptionHTML}}}</prose-mirror>
+        </div>
+        {{else}}
+        <div class="editor-wrapper">
+            {{#if editable}}
+            <div class="editor-header">
+                <button type="button" class="editor-control editor-edit" data-target="system.description" title="{{localize 'SIMPLE.EditDescription'}}">
+                    <i class="fas fa-edit"></i> {{localize "SIMPLE.Edit"}}
+                </button>
+            </div>
+            {{/if}}
+            <div class="editor editor-content">{{{descriptionHTML}}}</div>
+        </div>
+        {{/if}}
     </div>
 
     {{!-- Attributes Tab --}}

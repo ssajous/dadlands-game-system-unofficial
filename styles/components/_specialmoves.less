@@ -1,0 +1,231 @@
+// ===========================================
+// Special Moves Component
+// Special move list and sheet styling
+// ===========================================
+
+// ---------------------------------------------
+// Special Move List (Actor Sheet)
+// ---------------------------------------------
+.worldbuilding .specialmove-list {
+  list-style: none;
+  margin: 7px 0;
+  padding: 0;
+  overflow-y: auto;
+
+  .specialmove {
+    border-bottom: 1px solid @color-border-light;
+
+    &.expanded {
+      background: @color-background-subtle;
+    }
+  }
+
+  .specialmove-header {
+    min-height: 36px;
+    line-height: 24px;
+    padding: @spacing-sm @spacing-md;
+    align-items: center;
+    gap: @spacing-md;
+
+    img {
+      flex: 0 0 24px;
+    }
+  }
+
+  .specialmove-name {
+    margin: 0;
+    flex: 1;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: @spacing-sm;
+    transition: color @transition-fast;
+
+    &:hover {
+      color: @color-button-primary;
+    }
+
+    .expand-icon {
+      font-size: @font-size-xs;
+      width: 12px;
+      transition: transform @transition-fast;
+    }
+  }
+
+  .approach-badge {
+    .dadlands-badge(@color-law);
+    flex: 0 0 auto;
+
+    &.chaos {
+      background: @color-chaos;
+    }
+  }
+
+  .specialmove-controls {
+    display: flex;
+    align-items: center;
+    gap: @spacing-sm;
+    flex: 0 0 auto;
+  }
+
+  .use-move-btn {
+    background: linear-gradient(to bottom, @color-button-primary, @color-button-primary-hover);
+    color: white;
+    border: none;
+    padding: @spacing-sm @spacing-md;
+    border-radius: @size-border-radius-sm;
+    cursor: pointer;
+    font-size: @font-size-sm;
+    font-weight: bold;
+    transition: all @transition-fast;
+
+    &:hover {
+      background: linear-gradient(to bottom, @color-button-primary-hover, @color-button-primary-active);
+      transform: translateY(-1px);
+    }
+
+    i {
+      margin-right: @spacing-xs;
+    }
+  }
+
+  // Expanded description section
+  .specialmove-description {
+    padding: @spacing-sm @spacing-md @spacing-md;
+    padding-left: 44px; // Align with name (24px img + gap + some padding)
+    border-top: 1px dashed @color-border-light;
+
+    .description-content {
+      font-size: @font-size-base;
+      line-height: 1.5;
+
+      p {
+        margin: 0 0 @spacing-sm;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      // Handle empty descriptions
+      &:empty::before {
+        content: "No description";
+        color: @color-text-muted;
+        font-style: italic;
+      }
+    }
+  }
+}
+
+.worldbuilding .specialmove-create {
+  margin-top: @spacing-md;
+  padding-top: @spacing-md;
+  border-top: 1px solid @color-border-light;
+
+  .create-specialmove-btn {
+    background: linear-gradient(to bottom, @color-success, darken(@color-success, 10%));
+    color: white;
+    border: none;
+    padding: @spacing-sm @spacing-lg;
+    border-radius: @size-border-radius;
+    cursor: pointer;
+    font-size: @font-size-md;
+    font-weight: bold;
+    transition: all @transition-fast;
+    width: 100%;
+
+    &:hover {
+      background: linear-gradient(to bottom, darken(@color-success, 5%), darken(@color-success, 15%));
+      transform: translateY(-1px);
+    }
+
+    i {
+      margin-right: @spacing-sm;
+    }
+  }
+}
+
+// ---------------------------------------------
+// Special Move Sheet
+// ---------------------------------------------
+.worldbuilding.sheet.specialmove {
+  .specialmove-header {
+    .header-fields {
+      height: auto;
+    }
+
+    .approach-field {
+      display: flex;
+      align-items: center;
+      gap: @spacing-md;
+      margin-top: @spacing-md;
+
+      > label {
+        font-weight: bold;
+        white-space: nowrap;
+      }
+    }
+
+    .approach-select {
+      display: flex;
+      gap: @spacing-xl;
+    }
+
+    .approach-option {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+
+      input {
+        margin: 0;
+      }
+
+      .approach-label {
+        padding: @spacing-sm @spacing-md;
+        border-radius: @size-border-radius;
+        font-weight: bold;
+
+        &.law {
+          background: @color-law;
+          color: white;
+        }
+
+        &.chaos {
+          background: @color-chaos;
+          color: white;
+        }
+      }
+    }
+  }
+
+  .sheet-body {
+    padding: @spacing-md;
+  }
+}
+
+// ---------------------------------------------
+// Move Dialog - Fixed Approach
+// ---------------------------------------------
+.dadlands-move-form {
+  .approach-fixed {
+    display: flex;
+
+    .approach-label {
+      padding: @spacing-sm @spacing-md + @spacing-sm;
+      border-radius: @size-border-radius;
+      font-weight: bold;
+
+      &.law {
+        background: @color-law;
+        color: white;
+      }
+
+      &.chaos {
+        background: @color-chaos;
+        color: white;
+      }
+    }
+  }
+}

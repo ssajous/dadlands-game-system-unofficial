@@ -12,6 +12,28 @@ export class SimpleActor extends Actor {
     this.system.groups = this.system.groups || {};
     this.system.attributes = this.system.attributes || {};
     EntitySheetHelper.clampResourceValues(this.system.attributes);
+
+    // Dadlands: Ensure law and chaos tokens are valid
+    // Tokens cannot be negative, and total cannot exceed 10
+    // Note: Tokens CAN reach 0 during play (causes character failure)
+    if ( this.system.law !== undefined ) {
+      this.system.law = Math.max(0, Math.floor(this.system.law));
+    }
+    if ( this.system.chaos !== undefined ) {
+      this.system.chaos = Math.max(0, Math.floor(this.system.chaos));
+    }
+
+    // Cap total at 10
+    const total = (this.system.law || 0) + (this.system.chaos || 0);
+    if ( total > 10 ) {
+      const excess = total - 10;
+      // Reduce the larger stat to maintain balance
+      if ( this.system.law >= this.system.chaos ) {
+        this.system.law = Math.max(0, this.system.law - excess);
+      } else {
+        this.system.chaos = Math.max(0, this.system.chaos - excess);
+      }
+    }
   }
 
   /* -------------------------------------------- */
@@ -112,6 +134,12 @@ export class SimpleActor extends Actor {
     data.items = this.items.reduce((obj, item) => {
       const key = item.name.slugify({strict: true});
       const itemData = item.toObject(false).system;
+
+      // Skip items without attributes (like specialmove)
+      if ( !itemData.attributes ) {
+        obj[key] = itemData;
+        return obj;
+      }
 
       // Add items to shorthand and note which ones are formula attributes.
       for ( let [k, v] of Object.entries(itemData.attributes) ) {

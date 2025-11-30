@@ -1,14 +1,16 @@
-.worldbuilding {
-  /* Sheet Tabs */
-  /* Items List */
-  /* Attributes */
-}
 .worldbuilding .window-content {
   height: 100%;
-  padding: 5px;
+  padding: 4px;
   overflow-y: hidden;
 }
 .worldbuilding form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.worldbuilding .flexcol {
+  display: flex;
+  flex-direction: column;
   height: 100%;
 }
 .worldbuilding .sheet-header {
@@ -31,8 +33,8 @@
 }
 .worldbuilding .sheet-header h1.charname {
   height: 50px;
-  padding: 0px;
-  margin: 5px 0;
+  padding: 0;
+  margin: 4px 0;
   border-bottom: 0;
 }
 .worldbuilding .sheet-header h1.charname input {
@@ -66,14 +68,103 @@
 }
 .worldbuilding .sheet-body {
   overflow: hidden;
+  flex: 1;
+  min-height: 200px;
 }
 .worldbuilding .sheet-body .tab {
   height: 100%;
   overflow-y: auto;
+  padding: 4px;
+  display: none;
+}
+.worldbuilding .sheet-body .tab.active {
+  display: flex;
+  flex-direction: column;
+}
+.worldbuilding .sheet-body .tab.description.active {
+  display: flex;
+  flex-direction: column;
 }
 .worldbuilding .editor,
 .worldbuilding .editor-content {
   height: 100%;
+  min-height: 200px;
+}
+.worldbuilding prose-mirror {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 200px;
+}
+.worldbuilding prose-mirror .editor {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 200px;
+}
+.worldbuilding prose-mirror .editor-content,
+.worldbuilding prose-mirror .ProseMirror {
+  flex: 1;
+  min-height: 150px;
+  overflow-y: auto;
+}
+.worldbuilding .editor-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 200px;
+}
+.worldbuilding .editor-wrapper .editor-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 2px 4px;
+  border-bottom: 1px solid #BBB;
+  flex: 0 0 auto;
+}
+.worldbuilding .editor-wrapper .editor-control {
+  background: transparent;
+  border: 1px solid #AAA;
+  border-radius: 3px;
+  padding: 2px 4px;
+  cursor: pointer;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  transition: all 0.2s;
+}
+.worldbuilding .editor-wrapper .editor-control:hover {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: #AAA;
+}
+.worldbuilding .editor-wrapper .editor-control i {
+  font-size: 11px;
+}
+.worldbuilding .editor-wrapper .editor,
+.worldbuilding .editor-wrapper .editor-content {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 150px;
+}
+.worldbuilding .editor-wrapper prose-mirror {
+  flex: 1;
+  min-height: 200px;
+}
+.worldbuilding .editor-wrapper.editing .editor-control {
+  background: #27ae60;
+  color: white;
+  border-color: #27ae60;
+}
+.worldbuilding .editor-wrapper.editing .editor-control:hover {
+  background: #1e8449;
+}
+.worldbuilding.sheet.actor {
+  min-width: 560px;
+  min-height: 420px;
+}
+.worldbuilding.sheet.item {
+  min-width: 460px;
+  min-height: 400px;
 }
 .worldbuilding .item-list {
   list-style: none;
@@ -84,13 +175,13 @@
 .worldbuilding .item-list .item {
   min-height: 30px;
   line-height: 24px;
-  padding: 3px 0;
+  padding: 4px 0;
   border-bottom: 1px solid #BBB;
   align-items: stretch;
 }
 .worldbuilding .item-list .item img {
   flex: 0 0 24px;
-  margin-right: 5px;
+  margin-right: 4px;
 }
 .worldbuilding .item-list .item-name {
   margin: 0;
@@ -101,7 +192,6 @@
 .worldbuilding .item-list .item-buttons {
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row;
   align-items: center;
   flex: 2;
   justify-content: flex-start;
@@ -154,8 +244,8 @@
   top: 0;
   left: 0;
   align-items: center;
-  padding: 0 5px;
-  margin: 5px 0;
+  padding: 0 4px;
+  margin: 4px 0;
   background: #cfcdc2;
   border: 1px solid #AAA;
   border-radius: 2px;
@@ -168,7 +258,7 @@
   padding: 0;
 }
 .worldbuilding .attributes-list li > * {
-  margin: 0 3px;
+  margin: 0 4px;
   height: 28px;
   line-height: 24px;
   background: transparent;
@@ -197,7 +287,7 @@
   opacity: 1;
 }
 .worldbuilding .group-controls {
-  margin: 5px;
+  margin: 4px;
 }
 .worldbuilding .groups-list {
   list-style: none;
@@ -205,7 +295,7 @@
   padding: 0;
 }
 .worldbuilding .group {
-  margin: 5px 0 0;
+  margin: 4px 0 0;
   padding: 0;
 }
 .worldbuilding .group-header {
@@ -213,7 +303,7 @@
   background: rgba(0, 0, 0, 0.05);
   border: 1px solid #AAA;
   border-radius: 2px;
-  padding: 2px 5px;
+  padding: 2px 4px;
 }
 .worldbuilding .group-key,
 .worldbuilding .group-label {
@@ -233,13 +323,457 @@
 .worldbuilding .group-dtype {
   height: 24px;
   flex: 0 0 116px;
-  margin: 0 5px;
+  margin: 0 4px;
 }
-.worldbuilding.sheet.actor {
-  min-width: 560px;
-  min-height: 420px;
+.worldbuilding .dadlands-header {
+  flex: 0 0 auto;
 }
-.worldbuilding.sheet.item {
-  min-width: 460px;
-  min-height: 400px;
+.worldbuilding .dadlands-header .header-fields {
+  height: auto;
+}
+.worldbuilding .dadlands-header .header-fields .clan-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.worldbuilding .dadlands-header .header-fields .clan-field label {
+  font-weight: bold;
+  white-space: nowrap;
+}
+.worldbuilding .dadlands-header .header-fields .clan-field input {
+  flex: 1;
+  height: 24px;
+}
+.worldbuilding .dadlands-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  margin-top: 10px;
+  flex: 1 0 100%;
+}
+.worldbuilding .dadlands-stats .token-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.worldbuilding .dadlands-stats .token-group label {
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.worldbuilding .dadlands-stats .token-group .token-display {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.worldbuilding .dadlands-stats .token-group .token-display input {
+  width: 50px;
+  height: 28px;
+  text-align: center;
+}
+.worldbuilding .dadlands-stats .token-group .token-visual {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+  flex-wrap: wrap;
+  max-width: 100px;
+}
+.worldbuilding .dadlands-stats .token {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+.worldbuilding .dadlands-stats .law-token {
+  background: #2c3e50;
+  box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.3);
+}
+.worldbuilding .dadlands-stats .chaos-token {
+  background: #8e44ad;
+  box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.3);
+}
+.worldbuilding .dadlands-stats .token-total {
+  font-size: 11px;
+  color: #666;
+  margin-left: auto;
+}
+.worldbuilding .dadlands-stats .make-move-btn {
+  background: linear-gradient(to bottom, #3498db, #2980b9);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.worldbuilding .dadlands-stats .make-move-btn:hover {
+  background: linear-gradient(to bottom, #2980b9, #1f6dad);
+  transform: translateY(-1px);
+}
+.worldbuilding .dadlands-stats .make-move-btn i {
+  margin-right: 4px;
+}
+.dadlands-move-form .form-group {
+  margin-bottom: 12px;
+}
+.dadlands-move-form .form-group > label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+.dadlands-move-form .form-group .hint {
+  font-size: 11px;
+  color: #666;
+  margin: 4px 0 0;
+  font-style: italic;
+}
+.dadlands-move-form .form-group .checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: normal;
+  cursor: pointer;
+}
+.dadlands-move-form .form-group .checkbox input {
+  margin: 0;
+}
+.dadlands-move-form .approach-options {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+.dadlands-move-form .approach-options .approach-option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.dadlands-move-form .approach-options .approach-option input {
+  margin: 0;
+}
+.dadlands-move-form .approach-options .approach-option .approach-label {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+.dadlands-move-form .approach-options .approach-option .approach-label.law {
+  background: #2c3e50;
+  color: white;
+}
+.dadlands-move-form .approach-options .approach-option .approach-label.chaos {
+  background: #8e44ad;
+  color: white;
+}
+.dadlands-move-form input[type="number"] {
+  width: 60px;
+  text-align: center;
+}
+.dadlands-move-result {
+  padding: 8px;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+.dadlands-move-result h3 {
+  margin: 0 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid #BBB;
+}
+.dadlands-move-result .move-description {
+  margin-bottom: 8px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+  border-left: 3px solid #BBB;
+  font-size: 12px;
+  font-style: italic;
+  color: #666;
+}
+.dadlands-move-result .move-details {
+  margin-bottom: 8px;
+}
+.dadlands-move-result .move-details > div {
+  margin: 2px 0;
+}
+.dadlands-move-result .approach-badge.law {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 11px;
+  background: #2c3e50;
+  color: white;
+}
+.dadlands-move-result .approach-badge.chaos {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 11px;
+  background: #8e44ad;
+  color: white;
+}
+.dadlands-move-result .challenge-tag.difficult {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  margin-right: 4px;
+  background: #e74c3c;
+  color: white;
+}
+.dadlands-move-result .challenge-tag.defining {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  margin-right: 4px;
+  background: #f39c12;
+  color: white;
+}
+.dadlands-move-result .tokens-drawn {
+  margin: 8px 0;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+.dadlands-move-result .tokens-drawn .token-visual {
+  display: inline-flex;
+  gap: 4px;
+  margin: 4px 8px 4px 0;
+}
+.dadlands-move-result .chat-token {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+.dadlands-move-result .chat-token.law-token {
+  background: #2c3e50;
+}
+.dadlands-move-result .chat-token.chaos-token {
+  background: #8e44ad;
+}
+.dadlands-move-result .outcome.success {
+  padding: 6px;
+  border-radius: 3px;
+  margin: 8px 0;
+  background: rgba(39, 174, 96, 0.2);
+  border-left: 3px solid #27ae60;
+}
+.dadlands-move-result .outcome.failure {
+  padding: 6px;
+  border-radius: 3px;
+  margin: 8px 0;
+  background: rgba(231, 76, 60, 0.2);
+  border-left: 3px solid #e74c3c;
+}
+.dadlands-move-result .token-change,
+.dadlands-move-result .new-totals {
+  margin: 4px 0;
+  font-size: 12px;
+}
+.dadlands-move-result .max-tokens-reached {
+  color: #f39c12;
+  font-weight: bold;
+  font-size: 11px;
+}
+.dadlands-move-result .character-failed {
+  margin-top: 8px;
+  padding: 8px;
+  background: #e74c3c;
+  color: white;
+  border-radius: 3px;
+  font-weight: bold;
+  text-align: center;
+}
+.worldbuilding .specialmove-list {
+  list-style: none;
+  margin: 7px 0;
+  padding: 0;
+  overflow-y: auto;
+}
+.worldbuilding .specialmove-list .specialmove {
+  border-bottom: 1px solid #BBB;
+}
+.worldbuilding .specialmove-list .specialmove.expanded {
+  background: rgba(0, 0, 0, 0.05);
+}
+.worldbuilding .specialmove-list .specialmove-header {
+  min-height: 36px;
+  line-height: 24px;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 8px;
+}
+.worldbuilding .specialmove-list .specialmove-header img {
+  flex: 0 0 24px;
+}
+.worldbuilding .specialmove-list .specialmove-name {
+  margin: 0;
+  flex: 1;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s;
+}
+.worldbuilding .specialmove-list .specialmove-name:hover {
+  color: #3498db;
+}
+.worldbuilding .specialmove-list .specialmove-name .expand-icon {
+  font-size: 10px;
+  width: 12px;
+  transition: transform 0.2s;
+}
+.worldbuilding .specialmove-list .approach-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 11px;
+  background: #2c3e50;
+  color: white;
+  flex: 0 0 auto;
+}
+.worldbuilding .specialmove-list .approach-badge.chaos {
+  background: #8e44ad;
+}
+.worldbuilding .specialmove-list .specialmove-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+.worldbuilding .specialmove-list .use-move-btn {
+  background: linear-gradient(to bottom, #3498db, #2980b9);
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+.worldbuilding .specialmove-list .use-move-btn:hover {
+  background: linear-gradient(to bottom, #2980b9, #1f6dad);
+  transform: translateY(-1px);
+}
+.worldbuilding .specialmove-list .use-move-btn i {
+  margin-right: 2px;
+}
+.worldbuilding .specialmove-list .specialmove-description {
+  padding: 4px 8px 8px;
+  padding-left: 44px;
+  border-top: 1px dashed #BBB;
+}
+.worldbuilding .specialmove-list .specialmove-description .description-content {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.worldbuilding .specialmove-list .specialmove-description .description-content p {
+  margin: 0 0 4px;
+}
+.worldbuilding .specialmove-list .specialmove-description .description-content p:last-child {
+  margin-bottom: 0;
+}
+.worldbuilding .specialmove-list .specialmove-description .description-content:empty::before {
+  content: "No description";
+  color: #666;
+  font-style: italic;
+}
+.worldbuilding .specialmove-create {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #BBB;
+}
+.worldbuilding .specialmove-create .create-specialmove-btn {
+  background: linear-gradient(to bottom, #27ae60, #1e8449);
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  transition: all 0.2s;
+  width: 100%;
+}
+.worldbuilding .specialmove-create .create-specialmove-btn:hover {
+  background: linear-gradient(to bottom, #229955, #19703e);
+  transform: translateY(-1px);
+}
+.worldbuilding .specialmove-create .create-specialmove-btn i {
+  margin-right: 4px;
+}
+.worldbuilding.sheet.specialmove .specialmove-header .header-fields {
+  height: auto;
+}
+.worldbuilding.sheet.specialmove .specialmove-header .approach-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.worldbuilding.sheet.specialmove .specialmove-header .approach-field > label {
+  font-weight: bold;
+  white-space: nowrap;
+}
+.worldbuilding.sheet.specialmove .specialmove-header .approach-select {
+  display: flex;
+  gap: 15px;
+}
+.worldbuilding.sheet.specialmove .specialmove-header .approach-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.worldbuilding.sheet.specialmove .specialmove-header .approach-option input {
+  margin: 0;
+}
+.worldbuilding.sheet.specialmove .specialmove-header .approach-option .approach-label {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+.worldbuilding.sheet.specialmove .specialmove-header .approach-option .approach-label.law {
+  background: #2c3e50;
+  color: white;
+}
+.worldbuilding.sheet.specialmove .specialmove-header .approach-option .approach-label.chaos {
+  background: #8e44ad;
+  color: white;
+}
+.worldbuilding.sheet.specialmove .sheet-body {
+  padding: 8px;
+}
+.dadlands-move-form .approach-fixed {
+  display: flex;
+}
+.dadlands-move-form .approach-fixed .approach-label {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+.dadlands-move-form .approach-fixed .approach-label.law {
+  background: #2c3e50;
+  color: white;
+}
+.dadlands-move-form .approach-fixed .approach-label.chaos {
+  background: #8e44ad;
+  color: white;
 }

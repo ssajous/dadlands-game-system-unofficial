@@ -7,10 +7,12 @@
 import { SimpleActor } from "./actor.js";
 import { SimpleItem } from "./item.js";
 import { SimpleItemSheet } from "./item-sheet.js";
+import { SpecialMoveSheet } from "./specialmove-sheet.js";
 import { SimpleActorSheet } from "./actor-sheet.js";
 import { preloadHandlebarsTemplates } from "./templates.js";
 import { createWorldbuildingMacro } from "./macro.js";
 import { SimpleToken, SimpleTokenDocument } from "./token.js";
+import { actorDataModels, itemDataModels } from "./data-models.js";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -42,7 +44,12 @@ Hooks.once("init", async function() {
   CONFIG.Token.documentClass = SimpleTokenDocument;
   CONFIG.Token.objectClass = SimpleToken;
 
+  // Register data models
+  Object.assign(CONFIG.Actor.dataModels, actorDataModels);
+  Object.assign(CONFIG.Item.dataModels, itemDataModels);
+
   // Register sheet application classes
+  const { DocumentSheetConfig } = foundry.applications.apps;
   DocumentSheetConfig.unregisterSheet(Actor, "core", foundry.applications.sheets.ActorSheetV2);
   DocumentSheetConfig.registerSheet(Actor, "worldbuilding", SimpleActorSheet, {
     makeDefault: true,
@@ -50,8 +57,14 @@ Hooks.once("init", async function() {
   });
   DocumentSheetConfig.unregisterSheet(Item, "core", foundry.applications.sheets.ItemSheetV2);
   DocumentSheetConfig.registerSheet(Item, "worldbuilding", SimpleItemSheet, {
+    types: ["item"],
     makeDefault: true,
     label: "SIMPLE.SheetClassItem"
+  });
+  DocumentSheetConfig.registerSheet(Item, "worldbuilding", SpecialMoveSheet, {
+    types: ["specialmove"],
+    makeDefault: true,
+    label: "SIMPLE.SheetClassSpecialMove"
   });
 
   // Register system settings
@@ -98,6 +111,31 @@ Hooks.once("init", async function() {
    */
   Handlebars.registerHelper('slugify', function(value) {
     return value.slugify({strict: true});
+  });
+
+  /**
+   * Repeat a block a specified number of times.
+   */
+  Handlebars.registerHelper('times', function(n, block) {
+    let result = '';
+    for (let i = 0; i < n; i++) {
+      result += block.fn(i);
+    }
+    return result;
+  });
+
+  /**
+   * Add two numbers.
+   */
+  Handlebars.registerHelper('add', function(a, b) {
+    return (a || 0) + (b || 0);
+  });
+
+  /**
+   * Check equality between two values.
+   */
+  Handlebars.registerHelper('eq', function(a, b) {
+    return a === b;
   });
 
   // Preload template partials

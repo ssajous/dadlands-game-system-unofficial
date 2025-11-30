@@ -50,6 +50,8 @@ export class EntitySheetHelper {
     // Modify attributes on items.
     if ( data.items ) {
       data.items.forEach(item => {
+        // Skip items without attributes (like specialmove)
+        if ( !item.system.attributes ) return;
         // Iterate over attributes.
         for ( let [k, v] of Object.entries(item.system.attributes) ) {
           // Grouped attributes.
@@ -504,16 +506,24 @@ export class EntitySheetHelper {
     const label = game.i18n.localize(this.metadata.label);
     const title = game.i18n.format("DOCUMENT.Create", {type: label});
 
-    // Identify the template Actor types
+    // Get all valid document types (excluding base type)
+    const documentTypes = this.TYPES.filter(t => t !== CONST.BASE_DOCUMENT_TYPE);
+
+    // Identify template documents
     const collection = game.collections.get(this.documentName);
     const templates = collection.filter(a => a.getFlag("worldbuilding", "isTemplate"));
-    const defaultType = this.TYPES.filter(t => t !== CONST.BASE_DOCUMENT_TYPE)[0] ?? CONST.BASE_DOCUMENT_TYPE;
-    const types = {
-      [defaultType]: game.i18n.localize("SIMPLE.NoTemplate")
+
+    // Build the types object: first add all document types, then templates
+    const types = {};
+    for (const t of documentTypes) {
+      types[t] = game.i18n.localize(`TYPES.${documentName}.${t}`);
     }
-    for ( let a of templates ) {
-      types[a.id] = a.name;
+    for (let a of templates) {
+      types[a.id] = `${a.name} (${game.i18n.localize("SIMPLE.Template")})`;
     }
+
+    // Default to first document type
+    const defaultType = documentTypes[0] ?? CONST.BASE_DOCUMENT_TYPE;
 
     // Render the document creation form
     const template = "templates/sidebar/document-create.html";
@@ -522,7 +532,7 @@ export class EntitySheetHelper {
       folder: data.folder,
       folders: folders,
       hasFolders: folders.length > 1,
-      type: data.type || templates[0]?.id || "",
+      type: data.type || defaultType,
       types: types,
       hasTypes: true
     });
@@ -539,12 +549,17 @@ export class EntitySheetHelper {
           const fd = new foundry.applications.ux.FormDataExtended(form);
           let createData = fd.object;
 
-          // Merge with template data
-          const templateDoc = collection.get(form.elements.type?.value);
-          if ( templateDoc ) {
+          // Check if selection is a template document or a type
+          const selectedValue = form.elements.type?.value;
+          const templateDoc = collection.get(selectedValue);
+          if (templateDoc) {
+            // Merge with template data
             createData = foundry.utils.mergeObject(templateDoc.toObject(), createData);
             createData.type = templateDoc.type;
             delete createData.flags.worldbuilding.isTemplate;
+          } else {
+            // It's a document type, set it directly
+            createData.type = selectedValue;
           }
 
           // Merge provided override data

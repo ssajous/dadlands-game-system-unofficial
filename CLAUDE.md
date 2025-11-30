@@ -20,6 +20,8 @@ Foundry provides the following documentation for building game systems: https://
 
 That documentation along with any other documentation linked from it MUST be followed while building the system.
 
+When determining patterns and practices on how to interact with Foundry apis and modules, and generally how to build a working game system, use the dnd5e game system as an example. The code for the dnd5e game system is here: https://github.com/foundryvtt/dnd5e
+
 ### Core Module Structure (`module/`)
 
 - **simple.js** - Main entry point. Registers the system with Foundry VTT via hooks, sets up document classes, sheets, and system settings (macroShorthand, initFormula).
@@ -40,6 +42,14 @@ That documentation along with any other documentation linked from it MUST be fol
 - **token.js** - Custom Token and TokenDocument classes for resource bar handling
 
 - **macro.js** - Hotbar macro creation for attribute rolls
+
+### Code Cleanliness
+
+MUST use the advantages of the LESS css system. 
+  - Use variables and mixins whenever possible to keep the code DRY. 
+  - Use different less files and imports to keep styling separate for different components. 
+
+Code MUST adhere to SOLID design principals. Single responsibility and proper decoupling are critical. Code structure MUST group things by functional component (i.e. draw system) rather than just the type of of component (i.e. mixins, or templates).
 
 ### Attribute System
 

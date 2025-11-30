@@ -1,0 +1,381 @@
+// ===========================================
+// Dadlands RPG Component
+// Token system, move dialog, and chat results
+// ===========================================
+
+// ---------------------------------------------
+// Dadlands Mixins
+// ---------------------------------------------
+.dadlands-flex-row() {
+  display: flex;
+  flex-direction: row;
+}
+
+.dadlands-flex-col() {
+  display: flex;
+  flex-direction: column;
+}
+
+.dadlands-flex-wrap() {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.dadlands-token-base(@size: @size-token) {
+  display: inline-block;
+  width: @size;
+  height: @size;
+  border-radius: 50%;
+  border: 1px solid @color-token-border;
+}
+
+.dadlands-token-law() {
+  background: @color-law;
+  box-shadow: inset 0 0 3px @color-token-highlight;
+}
+
+.dadlands-token-chaos() {
+  background: @color-chaos;
+  box-shadow: inset 0 0 3px @color-token-highlight;
+}
+
+.dadlands-button-primary() {
+  background: linear-gradient(to bottom, @color-button-primary, @color-button-primary-hover);
+  color: white;
+  border: none;
+  padding: @spacing-md @spacing-xl;
+  border-radius: @size-border-radius;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all @transition-fast;
+
+  &:hover {
+    background: linear-gradient(to bottom, @color-button-primary-hover, @color-button-primary-active);
+    transform: translateY(-1px);
+  }
+}
+
+.dadlands-panel() {
+  padding: @spacing-lg;
+  background: @color-background-subtle;
+  border-radius: @size-border-radius;
+}
+
+.dadlands-card() {
+  padding: @spacing-md;
+  background: @color-background-card;
+  border-radius: @size-border-radius;
+}
+
+.dadlands-badge(@bg-color, @text-color: white) {
+  display: inline-block;
+  padding: @spacing-xs @spacing-md;
+  border-radius: @size-border-radius-sm;
+  font-weight: bold;
+  font-size: @font-size-sm;
+  background: @bg-color;
+  color: @text-color;
+}
+
+.dadlands-tag(@bg-color, @text-color: white) {
+  display: inline-block;
+  padding: @spacing-xs 6px;
+  border-radius: @size-border-radius-sm;
+  font-size: @font-size-xs;
+  margin-right: @spacing-sm;
+  background: @bg-color;
+  color: @text-color;
+}
+
+.dadlands-outcome-box(@border-color, @bg-color) {
+  padding: 6px;
+  border-radius: @size-border-radius-sm;
+  margin: @spacing-md 0;
+  background: @bg-color;
+  border-left: 3px solid @border-color;
+}
+
+.dadlands-hint-text() {
+  font-size: @font-size-sm;
+  color: @color-text-muted;
+  margin: @spacing-sm 0 0;
+  font-style: italic;
+}
+
+.dadlands-checkbox-label() {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: normal;
+  cursor: pointer;
+
+  input {
+    margin: 0;
+  }
+}
+
+// ---------------------------------------------
+// Actor Sheet Header
+// ---------------------------------------------
+.worldbuilding .dadlands-header {
+  flex: 0 0 auto;
+
+  .header-fields {
+    height: auto;
+
+    .clan-field {
+      .dadlands-flex-row();
+      align-items: center;
+      gap: @spacing-md;
+      margin-top: @spacing-sm;
+
+      label {
+        font-weight: bold;
+        white-space: nowrap;
+      }
+
+      input {
+        flex: 1;
+        height: 24px;
+      }
+    }
+  }
+}
+
+// ---------------------------------------------
+// Token Stats Section
+// ---------------------------------------------
+.worldbuilding .dadlands-stats {
+  .dadlands-flex-wrap();
+  align-items: center;
+  gap: @spacing-xl;
+  .dadlands-panel();
+  margin-top: @spacing-lg;
+  flex: 1 0 100%; // Force stats to its own row below header
+
+  .token-group {
+    .dadlands-flex-col();
+    align-items: center;
+
+    label {
+      font-weight: bold;
+      font-size: @font-size-md;
+      margin-bottom: @spacing-sm;
+    }
+
+    .token-display {
+      .dadlands-flex-row();
+      align-items: center;
+      gap: @spacing-md;
+
+      input {
+        width: @size-input-small;
+        height: @size-input-height;
+        text-align: center;
+      }
+    }
+
+    .token-visual {
+      .dadlands-flex-row();
+      gap: @spacing-xs;
+      flex-wrap: wrap;
+      max-width: 100px;
+    }
+  }
+
+  .token {
+    .dadlands-token-base();
+  }
+
+  .law-token {
+    .dadlands-token-law();
+  }
+
+  .chaos-token {
+    .dadlands-token-chaos();
+  }
+
+  .token-total {
+    font-size: @font-size-sm;
+    color: @color-text-muted;
+    margin-left: auto; // Push total and button to the right
+  }
+
+  .make-move-btn {
+    .dadlands-button-primary();
+    flex-shrink: 0; // Prevent button from shrinking
+
+    i {
+      margin-right: @spacing-sm;
+    }
+  }
+}
+
+// ---------------------------------------------
+// Move Dialog Form
+// ---------------------------------------------
+.dadlands-move-form {
+  .form-group {
+    margin-bottom: @spacing-md + @spacing-sm;
+
+    > label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: @spacing-sm;
+    }
+
+    .hint {
+      .dadlands-hint-text();
+    }
+
+    .checkbox {
+      .dadlands-checkbox-label();
+    }
+  }
+
+  .approach-options {
+    .dadlands-flex-row();
+    gap: @spacing-xl;
+
+    .approach-option {
+      .dadlands-flex-row();
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+
+      input {
+        margin: 0;
+      }
+
+      .approach-label {
+        padding: @spacing-sm @spacing-md + @spacing-sm;
+        border-radius: @size-border-radius;
+        font-weight: bold;
+
+        &.law {
+          background: @color-law;
+          color: white;
+        }
+
+        &.chaos {
+          background: @color-chaos;
+          color: white;
+        }
+      }
+    }
+  }
+
+  input[type="number"] {
+    width: 60px;
+    text-align: center;
+  }
+}
+
+// ---------------------------------------------
+// Chat Message Results
+// ---------------------------------------------
+.dadlands-move-result {
+  .dadlands-card();
+
+  h3 {
+    margin: 0 0 @spacing-md;
+    padding-bottom: @spacing-sm;
+    border-bottom: 2px solid @color-border-light;
+  }
+
+  .move-description {
+    margin-bottom: @spacing-md;
+    padding: @spacing-sm @spacing-md;
+    background: @color-background-subtle;
+    border-radius: @size-border-radius-sm;
+    border-left: 3px solid @color-border-light;
+    font-size: @font-size-md;
+    font-style: italic;
+    color: @color-text-muted;
+  }
+
+  .move-details {
+    margin-bottom: @spacing-md;
+
+    > div {
+      margin: @spacing-xs 0;
+    }
+  }
+
+  .approach-badge {
+    &.law {
+      .dadlands-badge(@color-law);
+    }
+
+    &.chaos {
+      .dadlands-badge(@color-chaos);
+    }
+  }
+
+  .challenge-tag {
+    &.difficult {
+      .dadlands-tag(@color-failure);
+    }
+
+    &.defining {
+      .dadlands-tag(@color-warning);
+    }
+  }
+
+  .tokens-drawn {
+    margin: @spacing-md 0;
+    padding: 6px;
+    background: @color-background-subtle;
+    border-radius: @size-border-radius-sm;
+
+    .token-visual {
+      display: inline-flex;
+      gap: @spacing-sm;
+      margin: @spacing-sm @spacing-md @spacing-sm 0;
+    }
+  }
+
+  .chat-token {
+    .dadlands-token-base(@size-token-chat);
+
+    &.law-token {
+      background: @color-law;
+    }
+
+    &.chaos-token {
+      background: @color-chaos;
+    }
+  }
+
+  .outcome {
+    &.success {
+      .dadlands-outcome-box(@color-success, @color-success-bg);
+    }
+
+    &.failure {
+      .dadlands-outcome-box(@color-failure, @color-failure-bg);
+    }
+  }
+
+  .token-change,
+  .new-totals {
+    margin: @spacing-sm 0;
+    font-size: @font-size-md;
+  }
+
+  .max-tokens-reached {
+    color: @color-warning;
+    font-weight: bold;
+    font-size: @font-size-sm;
+  }
+
+  .character-failed {
+    margin-top: @spacing-md;
+    padding: @spacing-md;
+    background: @color-failure;
+    color: white;
+    border-radius: @size-border-radius-sm;
+    font-weight: bold;
+    text-align: center;
+  }
+}

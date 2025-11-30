@@ -1,0 +1,237 @@
+// ===========================================
+// Sheet Component
+// Base sheet layout, header, tabs, and body
+// ===========================================
+
+// ---------------------------------------------
+// Sheet Mixins
+// ---------------------------------------------
+.sheet-flex-row() {
+  display: flex;
+  flex-direction: row;
+}
+
+// ---------------------------------------------
+// Window & Form
+// ---------------------------------------------
+.worldbuilding {
+  .window-content {
+    height: 100%;
+    padding: @spacing-sm;
+    overflow-y: hidden;
+  }
+
+  form {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .flexcol {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+}
+
+// ---------------------------------------------
+// Sheet Header
+// ---------------------------------------------
+.worldbuilding .sheet-header {
+  flex: 0 0 @size-profile-img;
+  overflow: hidden;
+  .sheet-flex-row();
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: @spacing-lg;
+
+  .profile-img {
+    flex: 0 0 @size-profile-img;
+    height: @size-profile-img;
+    margin-right: @spacing-lg;
+  }
+
+  .header-fields {
+    flex: 1;
+    height: @size-profile-img;
+  }
+
+  h1.charname {
+    height: 50px;
+    padding: 0;
+    margin: @spacing-sm 0;
+    border-bottom: 0;
+
+    input {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+  }
+}
+
+// ---------------------------------------------
+// Resource Display
+// ---------------------------------------------
+.worldbuilding .resource {
+  width: 50%;
+  height: 40px;
+  margin-top: @spacing-lg;
+  float: left;
+  text-align: center;
+
+  input {
+    width: 100px;
+    height: @size-input-height;
+  }
+}
+
+// ---------------------------------------------
+// Sheet Tabs
+// ---------------------------------------------
+.worldbuilding .tabs {
+  flex: 0 0 40px;
+  border-top: 1px solid @color-border;
+  border-bottom: 1px solid @color-border;
+
+  .item {
+    line-height: 40px;
+    font-weight: bold;
+  }
+
+  .item.active {
+    text-decoration: underline;
+    text-shadow: none;
+  }
+}
+
+// ---------------------------------------------
+// Sheet Body
+// ---------------------------------------------
+.worldbuilding .sheet-body {
+  overflow: hidden;
+  flex: 1;
+  min-height: 200px;
+
+  .tab {
+    height: 100%;
+    overflow-y: auto;
+    padding: @spacing-sm;
+    display: none;
+
+    &.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    // Description tab needs flex for editor to size properly
+    &.description.active {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.worldbuilding .editor,
+.worldbuilding .editor-content {
+  height: 100%;
+  min-height: 200px;
+}
+
+// ProseMirror editor styling - target the internal editor structure
+.worldbuilding prose-mirror {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 200px;
+
+  // The actual ProseMirror editor container
+  .editor {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 200px;
+  }
+
+  // The ProseMirror content editable area
+  .editor-content,
+  .ProseMirror {
+    flex: 1;
+    min-height: 150px;
+    overflow-y: auto;
+  }
+}
+
+// Editor wrapper for view/edit toggle
+.worldbuilding .editor-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 200px;
+
+  .editor-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: @spacing-xs @spacing-sm;
+    border-bottom: 1px solid @color-border-light;
+    flex: 0 0 auto;
+  }
+
+  .editor-control {
+    background: transparent;
+    border: 1px solid @color-border;
+    border-radius: @size-border-radius-sm;
+    padding: @spacing-xs @spacing-sm;
+    cursor: pointer;
+    font-size: @font-size-sm;
+    display: flex;
+    align-items: center;
+    gap: @spacing-xs;
+    transition: all @transition-fast;
+
+    &:hover {
+      background: @color-background-light;
+      border-color: @color-border;
+    }
+
+    i {
+      font-size: @font-size-sm;
+    }
+  }
+
+  .editor, .editor-content {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 150px;
+  }
+
+  prose-mirror {
+    flex: 1;
+    min-height: 200px;
+  }
+
+  &.editing {
+    .editor-control {
+      background: @color-success;
+      color: white;
+      border-color: @color-success;
+
+      &:hover {
+        background: darken(@color-success, 10%);
+      }
+    }
+  }
+}
+
+// ---------------------------------------------
+// Sheet Size Constraints
+// ---------------------------------------------
+.worldbuilding.sheet.actor {
+  min-width: 560px;
+  min-height: 420px;
+}
+
+.worldbuilding.sheet.item {
+  min-width: 460px;
+  min-height: 400px;
+}

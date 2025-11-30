@@ -1,94 +1,116 @@
 <div class="flexcol">
     {{!-- Sheet Header --}}
-    <header class="sheet-header">
+    <header class="sheet-header dadlands-header">
     <img class="profile-img" src="{{actor.img}}" data-action="editImage" data-edit="img" title="{{actor.name}}" height="100" width="100" />
     <div class="header-fields">
         <h1 class="charname">
             <input name="name" type="text" value="{{actor.name}}" placeholder="Name" />
         </h1>
-        <div class="resource">
-            <input type="number" name="system.health.value" value="{{systemData.health.value}}" data-dtype="Number"/>
-            <span> / </span>
-            <input type="number" name="system.health.max" value="{{systemData.health.max}}" data-dtype="Number"/>
+        <div class="clan-field">
+            <label>{{localize "SIMPLE.Clan"}}</label>
+            <input type="text" name="system.clan" value="{{systemData.clan}}" placeholder="{{localize 'SIMPLE.ClanPlaceholder'}}" />
         </div>
-        <div class="resource">
-            <input type="number" name="system.power.value" value="{{systemData.power.value}}" data-dtype="Number"/>
-            <span> / </span>
-            <input type="number" name="system.power.max" value="{{systemData.power.max}}" data-dtype="Number"/>
+    </div>
+    <div class="dadlands-stats">
+        <div class="token-group law-tokens">
+            <label>{{localize "SIMPLE.LawTokens"}}</label>
+            <div class="token-display">
+                <input type="number" name="system.law" value="{{systemData.law}}" data-dtype="Number" min="0" max="9" />
+                <div class="token-visual law">
+                    {{#times systemData.law}}<span class="token law-token" title="Law Token"></span>{{/times}}
+                </div>
+            </div>
         </div>
+        <div class="token-group chaos-tokens">
+            <label>{{localize "SIMPLE.ChaosTokens"}}</label>
+            <div class="token-display">
+                <input type="number" name="system.chaos" value="{{systemData.chaos}}" data-dtype="Number" min="0" max="9" />
+                <div class="token-visual chaos">
+                    {{#times systemData.chaos}}<span class="token chaos-token" title="Chaos Token"></span>{{/times}}
+                </div>
+            </div>
+        </div>
+        <div class="token-total">
+            <span>{{localize "SIMPLE.Total"}}: {{add systemData.law systemData.chaos}} / 10</span>
+        </div>
+        <button type="button" class="make-move-btn" data-action="makeMove">
+            <i class="fas fa-dice"></i> {{localize "SIMPLE.MakeMove"}}
+        </button>
     </div>
 </header>
 
 {{!-- Sheet Tab Navigation --}}
-<nav class="sheet-tabs tabs" data-group="primary">
-    <a class="item" data-tab="description" data-group="primary">Description</a>
-    <a class="item" data-tab="items" data-group="primary">Items</a>
-    <a class="item" data-tab="attributes" data-group="primary">Attributes</a>
+<nav class="sheet-tabs tabs">
+    <a class="item {{#if (eq activeTab 'description')}}active{{/if}}" data-tab="description" data-action="switchTab">{{localize "SIMPLE.TabDescription"}}</a>
+    <a class="item {{#if (eq activeTab 'specialmoves')}}active{{/if}}" data-tab="specialmoves" data-action="switchTab">{{localize "SIMPLE.SpecialMoves"}}</a>
+    <a class="item {{#if (eq activeTab 'attributes')}}active{{/if}}" data-tab="attributes" data-action="switchTab">{{localize "SIMPLE.TabAttributes"}}</a>
 </nav>
 
 {{!-- Sheet Body --}}
 <section class="sheet-body">
 
     {{!-- Biography Tab --}}
-    <div class="tab description" data-group="primary" data-tab="description">
-        {{editor biographyHTML target="system.biography" button=true editable=editable engine="prosemirror"}}
+    <div class="tab description {{#if (eq activeTab 'description')}}active{{/if}}" data-tab="description">
+        {{#if (eq editingDescriptionTarget "system.biography")}}
+        <div class="editor-wrapper editing">
+            <div class="editor-header">
+                <button type="button" class="editor-control editor-edit" data-target="system.biography" title="{{localize 'SIMPLE.FinishEditing'}}">
+                    <i class="fas fa-check"></i> {{localize "SIMPLE.Done"}}
+                </button>
+            </div>
+            <prose-mirror name="system.biography" value="{{biographyValue}}" document-uuid="{{actor.uuid}}" compact>{{{biographyHTML}}}</prose-mirror>
+        </div>
+        {{else}}
+        <div class="editor-wrapper">
+            {{#if editable}}
+            <div class="editor-header">
+                <button type="button" class="editor-control editor-edit" data-target="system.biography" title="{{localize 'SIMPLE.EditDescription'}}">
+                    <i class="fas fa-edit"></i> {{localize "SIMPLE.Edit"}}
+                </button>
+            </div>
+            {{/if}}
+            <div class="editor editor-content">{{{biographyHTML}}}</div>
+        </div>
+        {{/if}}
     </div>
 
-    {{!-- Owned Items Tab --}}
-    <div class="tab items" data-group="primary" data-tab="items">
-        <ol class="item-list">
-            {{#each items as |item id|}}
-            <li class="item flexrow" data-item-id="{{item._id}}">
-                <img src="{{item.img}}" title="{{item.name}}" width="24" height="24" />
-                <h4 class="item-name">{{item.name}}</h4>
-                {{!-- Iterate through all attributes on the item and output buttons for any that are formula. --}}
-                <div class="item-buttons">
-                    {{#each item.systemData.attributes as |itemAttr key|}}
-                    {{#if itemAttr.dtype}}
-                        {{#if itemAttr.isFormula}}
-                            {{!-- Use the items.name.key format for shorthand. --}}
-                            {{#if ../../shorthand}}
-                            <button type="button" class="item-button rollable" data-action="rollItem" data-roll="@items.{{slugify item.name}}.{{key}}" data-label="{{ itemAttr.label }}"
-                                title="{{itemAttr.value}}">{{itemAttr.label}}</button>
-                            {{!-- Use the items.name.attributes.key.value format otherwise. --}}
-                            {{else}}
-                            <button type="button" class="item-button rollable" data-action="rollItem"
-                                data-roll="@items.{{slugify item.name}}.attributes.{{key}}.value" data-label="{{ itemAttr.label }}"
-                                title="{{itemAttr.value}}">{{itemAttr.label}}</button>
-                            {{/if}}
-                        {{/if}}
-                    {{else}}
-                        {{#each itemAttr as |itemGroupedAttr groupedKey|}}
-                            {{#if itemGroupedAttr.isFormula}}
-                                {{!-- Use the items.name.key format for shorthand. --}}
-                                {{#if ../../../shorthand}}
-                                <button type="button" class="item-button rollable" data-action="rollItem" data-roll="@items.{{slugify item.name}}.{{key}}.{{groupedKey}}" data-label="{{ itemGroupedAttr.label }}"
-                                    title="{{itemGroupedAttr.value}}">{{itemGroupedAttr.label}}</button>
-                                {{!-- Use the items.name.attributes.key.value format otherwise. --}}
-                                {{else}}
-                                <button type="button" class="item-button rollable" data-action="rollItem"
-                                    data-roll="@items.{{slugify item.name}}.attributes.{{key}}.{{groupedKey}}.value" data-label="{{ itemGroupedAttr.label }}"
-                                    title="{{itemGroupedAttr.value}}">{{itemGroupedAttr.label}}</button>
-                                {{/if}}
-                            {{/if}}
-                        {{/each}}
-                    {{/if}}
-                    {{/each}}
+    {{!-- Special Moves Tab --}}
+    <div class="tab specialmoves {{#if (eq activeTab 'specialmoves')}}active{{/if}}" data-tab="specialmoves">
+        <ol class="specialmove-list">
+            {{#each specialMoves as |move id|}}
+            <li class="specialmove {{#if move.isExpanded}}expanded{{/if}}" data-item-id="{{move._id}}">
+                <div class="specialmove-header flexrow">
+                    <img src="{{move.img}}" title="{{move.name}}" width="24" height="24" />
+                    <h4 class="specialmove-name">
+                        <i class="fas {{#if move.isExpanded}}fa-chevron-down{{else}}fa-chevron-right{{/if}} expand-icon"></i>
+                        {{move.name}}
+                    </h4>
+                    <span class="approach-badge {{move.system.approach}}">{{#if (eq move.system.approach "law")}}{{localize "SIMPLE.Law"}}{{else}}{{localize "SIMPLE.Chaos"}}{{/if}}</span>
+                    <div class="specialmove-controls">
+                        <button type="button" class="use-move-btn" data-action="useSpecialMove" title="{{localize 'SIMPLE.UseMove'}}">
+                            <i class="fas fa-dice"></i> {{localize "SIMPLE.UseMove"}}
+                        </button>
+                        <a class="item-control" title="{{ localize "SIMPLE.ItemEdit" }}" data-action="editItem"><i class="fas fa-edit"></i></a>
+                        <a class="item-control" title="{{ localize "SIMPLE.ItemDelete" }}" data-action="deleteItem"><i class="fas fa-trash"></i></a>
+                    </div>
                 </div>
-                <div class="item-controls">
-                    <a class="item-control" title="{{ localize "SIMPLE.ItemEdit" }}" data-action="editItem"><i class="fas fa-edit"></i></a>
-                    <a class="item-control" title="{{ localize "SIMPLE.ItemDelete" }}" data-action="deleteItem"><i class="fas fa-trash"></i></a>
+                {{#if move.isExpanded}}
+                <div class="specialmove-description">
+                    <div class="description-content">{{{move.descriptionHTML}}}</div>
                 </div>
+                {{/if}}
             </li>
             {{/each}}
         </ol>
-        <p>
-            <a class="item-control" title="{{ localize "SIMPLE.ItemCreate" }}" data-action="createItem"><i class="fas fa-plus"></i> {{ localize "SIMPLE.ItemCreate" }}</a>
-        </p>
+        <div class="specialmove-create">
+            <button type="button" class="create-specialmove-btn" data-action="createSpecialMove" title="{{ localize 'SIMPLE.CreateSpecialMove' }}">
+                <i class="fas fa-plus"></i> {{ localize "SIMPLE.CreateSpecialMove" }}
+            </button>
+        </div>
     </div>
 
     {{!-- Attributes Tab --}}
-    <div class="tab attributes" data-group="primary" data-tab="attributes">
+    <div class="tab attributes {{#if (eq activeTab 'attributes')}}active{{/if}}" data-tab="attributes">
         <header class="attributes-header flexrow">
             <span class="attribute-key">{{localize "SIMPLE.AttributeKey"}}</span>
             <span class="attribute-value">{{localize "SIMPLE.AttributeValue"}}</span>
