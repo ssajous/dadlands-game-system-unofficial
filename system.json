@@ -1,14 +1,14 @@
 {
-  "id": "worldbuilding",
+  "id": "dadlands",
   "version": "0.9.0",
-  "title": "Simple World-Building",
-  "url": "https://github.com/foundryvtt/worldbuilding/",
-  "description": "A minimalist game system which provides configurable Actor and Item templates to support free-form system agnostic game-play.",
+  "title": "Dadlands",
+  "url": "https://github.com/stansajous/dadlands/",
+  "description": "A game system for Dadlands - a rules-light RPG about dads in the wild west.",
   "license": "LICENSE.txt",
   "authors": [
     {
-      "name": "Atropos",
-      "url": "https://foundryvtt.com"
+      "name": "JuiceboxOfLegend",
+      "url": "https://github.com/stansajous"
     }
   ],
   "esmodules": ["module/simple.js"],
@@ -49,8 +49,8 @@
     "distance": 5,
     "units": "ft"
   },
-  "primaryTokenAttribute": "health",
-  "secondaryTokenAttribute": "power",
-  "manifest": "https://raw.githubusercontent.com/foundryvtt/worldbuilding/master/system.json",
-  "download": "https://github.com/foundryvtt/worldbuilding/archive/refs/tags/release-082.zip"
+  "primaryTokenAttribute": "law",
+  "secondaryTokenAttribute": "chaos",
+  "manifest": "https://raw.githubusercontent.com/stansajous/dadlands/master/system.json",
+  "download": "https://github.com/stansajous/dadlands/archive/refs/tags/release-082.zip"
 }

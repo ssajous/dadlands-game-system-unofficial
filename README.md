@@ -1,3 +1,3 @@
-# Simple Worldbuilding System
+# Dadlands
 
-A simple game system for Foundry VTT which allows for flexible definition of Actors and Items to assist with worldbuilding or for running games which do not have a more complete system implementation available.
+A game system for Foundry VTT implementing Dadlands - a rules-light RPG about dads in the wild west. Features a unique Law/Chaos token system for resolving actions and special moves.

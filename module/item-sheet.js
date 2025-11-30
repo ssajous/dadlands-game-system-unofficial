@@ -15,7 +15,7 @@ export class SimpleItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
   /** @override */
   static DEFAULT_OPTIONS = {
-    classes: ["worldbuilding", "sheet", "item"],
+    classes: ["dadlands", "sheet", "item"],
     position: {
       width: 520,
       height: 480
@@ -39,7 +39,7 @@ export class SimpleItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   /** @override */
   static PARTS = {
     form: {
-      template: "systems/worldbuilding/templates/item-sheet.html"
+      template: "systems/dadlands/templates/item-sheet.html"
     }
   };
 

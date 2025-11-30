@@ -1,5 +1,5 @@
 /**
- * A simple and flexible system for world-building using an arbitrary collection of character and item attributes
+ * Dadlands - A rules-light RPG about dads in the wild west
  * Author: Atropos
  */
 
@@ -10,7 +10,7 @@ import { SimpleItemSheet } from "./item-sheet.js";
 import { SpecialMoveSheet } from "./specialmove-sheet.js";
 import { SimpleActorSheet } from "./actor-sheet.js";
 import { preloadHandlebarsTemplates } from "./templates.js";
-import { createWorldbuildingMacro } from "./macro.js";
+import { createDadlandsMacro } from "./macro.js";
 import { SimpleToken, SimpleTokenDocument } from "./token.js";
 import { actorDataModels, itemDataModels } from "./data-models.js";
 
@@ -22,7 +22,7 @@ import { actorDataModels, itemDataModels } from "./data-models.js";
  * Init hook.
  */
 Hooks.once("init", async function() {
-  console.log(`Initializing Simple Worldbuilding System`);
+  console.log(`Initializing Dadlands System`);
 
   /**
    * Set an initiative formula for the system. This will be updated later.
@@ -33,9 +33,9 @@ Hooks.once("init", async function() {
     decimals: 2
   };
 
-  game.worldbuilding = {
+  game.dadlands = {
     SimpleActor,
-    createWorldbuildingMacro
+    createDadlandsMacro
   };
 
   // Define custom Document classes
@@ -51,24 +51,24 @@ Hooks.once("init", async function() {
   // Register sheet application classes
   const { DocumentSheetConfig } = foundry.applications.apps;
   DocumentSheetConfig.unregisterSheet(Actor, "core", foundry.applications.sheets.ActorSheetV2);
-  DocumentSheetConfig.registerSheet(Actor, "worldbuilding", SimpleActorSheet, {
+  DocumentSheetConfig.registerSheet(Actor, "dadlands", SimpleActorSheet, {
     makeDefault: true,
     label: "SIMPLE.SheetClassActor"
   });
   DocumentSheetConfig.unregisterSheet(Item, "core", foundry.applications.sheets.ItemSheetV2);
-  DocumentSheetConfig.registerSheet(Item, "worldbuilding", SimpleItemSheet, {
+  DocumentSheetConfig.registerSheet(Item, "dadlands", SimpleItemSheet, {
     types: ["item"],
     makeDefault: true,
     label: "SIMPLE.SheetClassItem"
   });
-  DocumentSheetConfig.registerSheet(Item, "worldbuilding", SpecialMoveSheet, {
+  DocumentSheetConfig.registerSheet(Item, "dadlands", SpecialMoveSheet, {
     types: ["specialmove"],
     makeDefault: true,
     label: "SIMPLE.SheetClassSpecialMove"
   });
 
   // Register system settings
-  game.settings.register("worldbuilding", "macroShorthand", {
+  game.settings.register("dadlands", "macroShorthand", {
     name: "SETTINGS.SimpleMacroShorthandN",
     hint: "SETTINGS.SimpleMacroShorthandL",
     scope: "world",
@@ -78,7 +78,7 @@ Hooks.once("init", async function() {
   });
 
   // Register initiative setting.
-  game.settings.register("worldbuilding", "initFormula", {
+  game.settings.register("dadlands", "initFormula", {
     name: "SETTINGS.SimpleInitFormulaN",
     hint: "SETTINGS.SimpleInitFormulaL",
     scope: "world",
@@ -89,7 +89,7 @@ Hooks.once("init", async function() {
   });
 
   // Retrieve and assign the initiative formula setting.
-  const initFormula = game.settings.get("worldbuilding", "initFormula");
+  const initFormula = game.settings.get("dadlands", "initFormula");
   _simpleUpdateInit(initFormula);
 
   /**
@@ -145,7 +145,7 @@ Hooks.once("init", async function() {
 /**
  * Macrobar hook.
  */
-Hooks.on("hotbarDrop", (bar, data, slot) => createWorldbuildingMacro(data, slot));
+Hooks.on("hotbarDrop", (bar, data, slot) => createDadlandsMacro(data, slot));
 
 /**
  * Adds the actor template context menu.
@@ -162,7 +162,7 @@ Hooks.on("getActorDirectoryEntryContext", (html, options) => {
     },
     callback: li => {
       const actor = game.actors.get(li.dataset.documentId);
-      actor.setFlag("worldbuilding", "isTemplate", true);
+      actor.setFlag("dadlands", "isTemplate", true);
     }
   });
 
@@ -176,7 +176,7 @@ Hooks.on("getActorDirectoryEntryContext", (html, options) => {
     },
     callback: li => {
       const actor = game.actors.get(li.dataset.documentId);
-      actor.setFlag("worldbuilding", "isTemplate", false);
+      actor.setFlag("dadlands", "isTemplate", false);
     }
   });
 });
@@ -196,7 +196,7 @@ Hooks.on("getItemDirectoryEntryContext", (html, options) => {
     },
     callback: li => {
       const item = game.items.get(li.dataset.documentId);
-      item.setFlag("worldbuilding", "isTemplate", true);
+      item.setFlag("dadlands", "isTemplate", true);
     }
   });
 
@@ -210,7 +210,7 @@ Hooks.on("getItemDirectoryEntryContext", (html, options) => {
     },
     callback: li => {
       const item = game.items.get(li.dataset.documentId);
-      item.setFlag("worldbuilding", "isTemplate", false);
+      item.setFlag("dadlands", "isTemplate", false);
     }
   });
 });

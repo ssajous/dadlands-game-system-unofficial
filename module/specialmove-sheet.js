@@ -12,7 +12,7 @@ export class SpecialMoveSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
   /** @override */
   static DEFAULT_OPTIONS = {
-    classes: ["worldbuilding", "sheet", "item", "specialmove"],
+    classes: ["dadlands", "sheet", "item", "specialmove"],
     position: {
       width: 450,
       height: 400
@@ -31,7 +31,7 @@ export class SpecialMoveSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   /** @override */
   static PARTS = {
     form: {
-      template: "systems/worldbuilding/templates/specialmove-sheet.html"
+      template: "systems/dadlands/templates/specialmove-sheet.html"
     }
   };
 

@@ -174,7 +174,7 @@ export class EntitySheetHelper {
     const button = event.currentTarget;
     const label = button.closest(".attribute").querySelector(".attribute-label")?.value;
     const chatLabel = label ?? button.parentElement.querySelector(".attribute-key").value;
-    const shorthand = game.settings.get("worldbuilding", "macroShorthand");
+    const shorthand = game.settings.get("dadlands", "macroShorthand");
 
     // Use the actor for rollData so that formulas are always in reference to the parent actor.
     const rollData = this.actor.getRollData();
@@ -511,7 +511,7 @@ export class EntitySheetHelper {
 
     // Identify template documents
     const collection = game.collections.get(this.documentName);
-    const templates = collection.filter(a => a.getFlag("worldbuilding", "isTemplate"));
+    const templates = collection.filter(a => a.getFlag("dadlands", "isTemplate"));
 
     // Build the types object: first add all document types, then templates
     const types = {};
@@ -556,7 +556,7 @@ export class EntitySheetHelper {
             // Merge with template data
             createData = foundry.utils.mergeObject(templateDoc.toObject(), createData);
             createData.type = templateDoc.type;
-            delete createData.flags.worldbuilding.isTemplate;
+            delete createData.flags.dadlands.isTemplate;
           } else {
             // It's a document type, set it directly
             createData.type = selectedValue;

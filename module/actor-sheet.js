@@ -13,7 +13,7 @@ export class SimpleActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   /** @override */
   static DEFAULT_OPTIONS = {
-    classes: ["worldbuilding", "sheet", "actor"],
+    classes: ["dadlands", "sheet", "actor"],
     position: {
       width: 600,
       height: 600
@@ -43,7 +43,7 @@ export class SimpleActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /** @override */
   static PARTS = {
     form: {
-      template: "systems/worldbuilding/templates/actor-sheet.html"
+      template: "systems/dadlands/templates/actor-sheet.html"
     }
   };
 
@@ -68,7 +68,7 @@ export class SimpleActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     context.actor = this.actor;
     context.systemData = actorData.system;
-    context.shorthand = !!game.settings.get("worldbuilding", "macroShorthand");
+    context.shorthand = !!game.settings.get("dadlands", "macroShorthand");
     context.dtypes = ATTRIBUTE_TYPES;
     context.editable = this.isEditable;
 
