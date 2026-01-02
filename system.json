@@ -1,9 +1,9 @@
 {
   "id": "dadlands",
-  "version": "0.9.0",
-  "title": "Dadlands",
+  "version": "0.9.1",
+  "title": "Dadlands - Unofficial",
   "url": "https://github.com/stansajous/dadlands/",
-  "description": "A game system for Dadlands - a rules-light RPG about dads.",
+  "description": "An unofficial game system for Dadlands - a rules-light RPG about dads.",
   "license": "LICENSE.txt",
   "authors": [
     {
@@ -44,11 +44,6 @@
       "lang": "en",
       "name": "English",
       "path": "lang/en.json"
-    },
-    {
-      "lang": "pl",
-      "name": "Polski",
-      "path": "lang/pl.json"
     }
   ],
   "compatibility": {

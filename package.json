@@ -1,7 +1,7 @@
 {
-  "name": "dadlands",
-  "version": "1.0.0",
-  "description": "CSS compiler for the Dadlands game system",
+  "name": "dadlands-unnoficial",
+  "version": "0.9.0",
+  "description": "Dadlands game system for Foundry VTT",
   "scripts": {
     "css": "gulp css",
     "watch": "gulp",
