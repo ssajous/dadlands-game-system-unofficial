@@ -3,7 +3,7 @@
   "version": "0.9.0",
   "title": "Dadlands",
   "url": "https://github.com/stansajous/dadlands/",
-  "description": "A game system for Dadlands - a rules-light RPG about dads in the wild west.",
+  "description": "A game system for Dadlands - a rules-light RPG about dads.",
   "license": "LICENSE.txt",
   "authors": [
     {
@@ -51,6 +51,6 @@
   },
   "primaryTokenAttribute": "law",
   "secondaryTokenAttribute": "chaos",
-  "manifest": "https://raw.githubusercontent.com/stansajous/dadlands/master/system.json",
-  "download": "https://github.com/stansajous/dadlands/archive/refs/tags/release-082.zip"
+  "manifest": "https://github.com/stansajous/dadlands/releases/latest/download/system.json",
+  "download": "https://github.com/stansajous/dadlands/releases/latest/download/dadlands.zip"
 }

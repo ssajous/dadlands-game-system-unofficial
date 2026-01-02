@@ -1,0 +1,87 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  PACKAGE_ID: dadlands
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build CSS
+        run: npm run css
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          # Extract version from tag (removes 'v' prefix)
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Validate version match
+        run: |
+          MANIFEST_VERSION=$(jq -r '.version' system.json)
+          TAG_VERSION="${{ steps.version.outputs.VERSION }}"
+          if [ "$MANIFEST_VERSION" != "$TAG_VERSION" ]; then
+            echo "::error::system.json version ($MANIFEST_VERSION) does not match tag (v$TAG_VERSION)"
+            exit 1
+          fi
+
+      - name: Update manifest for release
+        run: |
+          # Update download URL to point to this release's zip
+          DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.TAG }}/${{ env.PACKAGE_ID }}.zip"
+          jq --arg url "$DOWNLOAD_URL" '.download = $url' system.json > system.json.tmp
+          mv system.json.tmp system.json
+
+          # Update manifest URL to point to the release asset
+          MANIFEST_URL="https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.TAG }}/system.json"
+          jq --arg url "$MANIFEST_URL" '.manifest = $url' system.json > system.json.tmp
+          mv system.json.tmp system.json
+
+      - name: Create release archive
+        run: |
+          # Create zip with explicit includes (not exclusions)
+          zip -r ${{ env.PACKAGE_ID }}.zip \
+            system.json \
+            LICENSE.txt \
+            README.md \
+            lang/ \
+            module/ \
+            styles/simple.css \
+            templates/ \
+            Dadlands-RPG.pdf
+
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "${{ env.PACKAGE_ID }}.zip,system.json"
+          name: "Release ${{ steps.version.outputs.TAG }}"
+          body: |
+            ## Installation
+
+            **Manifest URL:** `https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.TAG }}/system.json`
+
+            Copy the manifest URL above and paste it into Foundry VTT's "Install System" dialog.
+          allowUpdates: true
+          makeLatest: true
