@@ -11,21 +11,31 @@
       "url": "https://github.com/stansajous"
     }
   ],
-  "esmodules": ["module/simple.js"],
-  "styles": ["styles/simple.css"],
+  "esmodules": [
+    "module/simple.js"
+  ],
+  "styles": [
+    "styles/simple.css"
+  ],
   "packs": [],
   "documentTypes": {
     "Actor": {
       "character": {
-        "htmlFields": ["biography"]
+        "htmlFields": [
+          "biography"
+        ]
       }
     },
     "Item": {
       "item": {
-        "htmlFields": ["description"]
+        "htmlFields": [
+          "description"
+        ]
       },
       "specialmove": {
-        "htmlFields": ["description"]
+        "htmlFields": [
+          "description"
+        ]
       }
     }
   },
@@ -52,5 +62,5 @@
   "primaryTokenAttribute": "law",
   "secondaryTokenAttribute": "chaos",
   "manifest": "https://raw.githubusercontent.com/stansajous/dadlands/refs/heads/main/system.json",
-  "download": "https://github.com/stansajous/dadlands/releases/download/v0.9.0/dadlands.zip"
+  "download": "https://github.com/ssajous/dadlands-game-system-unofficial/releases/download/v0.9.0/dadlands.zip"
 }
