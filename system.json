@@ -2,7 +2,7 @@
   "id": "dadlands",
   "version": "0.9.1",
   "title": "Dadlands - Unofficial",
-  "url": "https://github.com/stansajous/dadlands/",
+  "url": "https://github.com/ssajous/dadlands-game-system-unofficial/",
   "description": "An unofficial game system for Dadlands - a rules-light RPG about dads.",
   "license": "LICENSE.txt",
   "authors": [
@@ -56,6 +56,6 @@
   },
   "primaryTokenAttribute": "law",
   "secondaryTokenAttribute": "chaos",
-  "manifest": "https://raw.githubusercontent.com/stansajous/dadlands/refs/heads/main/system.json",
+  "manifest": "https://raw.githubusercontent.com/ssajous/dadlands-game-system-unofficial/refs/heads/main/system.json",
   "download": "https://github.com/ssajous/dadlands-game-system-unofficial/releases/download/v0.9.1/dadlands.zip"
 }
