@@ -41,20 +41,23 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "TAG=$TAG" >> $GITHUB_OUTPUT
 
-      - name: Validate version match
+      - name: Update versions and download URL
         run: |
-          MANIFEST_VERSION=$(jq -r '.version' system.json)
-          TAG_VERSION="${{ steps.version.outputs.VERSION }}"
-          if [ "$MANIFEST_VERSION" != "$TAG_VERSION" ]; then
-            echo "::error::system.json version ($MANIFEST_VERSION) does not match tag (v$TAG_VERSION)"
-            exit 1
-          fi
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          TAG="${{ steps.version.outputs.TAG }}"
+          DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/${TAG}/${{ env.PACKAGE_ID }}.zip"
 
-      - name: Update manifest download URL
-        run: |
-          DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.TAG }}/${{ env.PACKAGE_ID }}.zip"
-          jq --arg url "$DOWNLOAD_URL" '.download = $url' system.json > system.json.tmp
+          # Update system.json: version and download URL
+          jq --arg ver "$VERSION" --arg url "$DOWNLOAD_URL" \
+            '.version = $ver | .download = $url' system.json > system.json.tmp
           mv system.json.tmp system.json
+
+          # Update package.json: version
+          jq --arg ver "$VERSION" '.version = $ver' package.json > package.json.tmp
+          mv package.json.tmp package.json
+
+          echo "Updated version to $VERSION"
+          echo "Updated download URL to $DOWNLOAD_URL"
 
       - name: Create release archive
         run: |
@@ -83,10 +86,10 @@ jobs:
           allowUpdates: true
           makeLatest: true
 
-      - name: Commit updated system.json to main
+      - name: Commit release updates to main
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add system.json
+          git add system.json package.json
           git commit -m "Release ${{ steps.version.outputs.TAG }}"
           git push origin HEAD:main
