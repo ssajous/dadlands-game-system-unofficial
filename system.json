@@ -57,5 +57,5 @@
   "primaryTokenAttribute": "law",
   "secondaryTokenAttribute": "chaos",
   "manifest": "https://raw.githubusercontent.com/stansajous/dadlands/refs/heads/main/system.json",
-  "download": "https://github.com/ssajous/dadlands-game-system-unofficial/releases/download/v0.9.0/dadlands.zip"
+  "download": "https://github.com/ssajous/dadlands-game-system-unofficial/releases/download/v0.9.1/dadlands.zip"
 }

@@ -1,6 +1,6 @@
 {
   "name": "dadlands-unnoficial",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Dadlands game system for Foundry VTT",
   "scripts": {
     "css": "gulp css",
